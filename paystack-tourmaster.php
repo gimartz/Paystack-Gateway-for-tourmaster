@@ -1,4 +1,13 @@
 <?php
+/**
+ * Plugin Name: Paystack Gateway for Tour Master
+ * Plugin URI: https://paystack.com
+ * Description: Processes payments via Paystack for Tour Master theme
+ * Version: 1.0.0
+ * Author: Paystack
+ * License: GPLv2 or later
+ */
+
 //add paystack as payment option for credit card in the tourmaster payment panel
 add_filter('goodlayers_credit_card_payment_gateway_options', 'goodlayers_paystack_payment_gateway_options');
 	if( !function_exists('goodlayers_paystack_payment_gateway_options') ){
