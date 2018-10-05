@@ -7,7 +7,6 @@
  * Author: Paystack
  * License: GPLv2 or later
  */
-
 //add paystack as payment option for credit card in the tourmaster payment panel
 add_filter('goodlayers_credit_card_payment_gateway_options', 'goodlayers_paystack_payment_gateway_options');
 	if( !function_exists('goodlayers_paystack_payment_gateway_options') ){
@@ -18,9 +17,10 @@ add_filter('goodlayers_credit_card_payment_gateway_options', 'goodlayers_paystac
 		}
 	}
 // set field option in the admin
-add_filter('goodlayers_plugin_payment_option', 'tourmaster_paystack_payment_option');
-	if( !function_exists('tourmaster_paystack_payment_option') ){
-		function tourmaster_paystack_payment_option( $options ){
+add_filter('goodlayers_plugin_payment_option', 'goodlayers_paystack_payment_option');
+	if( !function_exists('goodlayers_paystack_payment_option') ){
+		function goodlayers_paystack_payment_option( $options ){
+
 		$options['paystack'] = array(
 				'title' => esc_html__('Paystack', 'tourmaster'),
 				'options' => array(
@@ -66,13 +66,16 @@ add_filter('goodlayers_plugin_payment_option', 'tourmaster_paystack_payment_opti
 $current_payment_gateway = apply_filters('goodlayers_payment_get_option', '', 'credit-card-payment-gateway');
 if( $current_payment_gateway == 'paystack' ){
 		//include_once(TOURMASTER_LOCAL . '/include/paystack/autoload.php');
+
         add_action('goodlayers_payment_page_init', 'goodlayers_paystack_payment_page_init');
 		add_filter('goodlayers_plugin_payment_attribute', 'goodlayers_paystack_payment_attribute');	
-		add_filter('goodlayers_paystack_payment_form', 'goodlayers_paystack_payment_form', 10, 2);;
-
+		add_filter('goodlayers_paystack_payment_form', 'goodlayers_paystack_payment_form', 10, 2);
+		
 		add_action('wp_ajax_paystack_payment_charge', 'goodlayers_paystack_payment_charge');
-		add_action('wp_ajax_nopriv_paystack_charge', 'goodlayers_paystack_payment_charge');
+		add_action('wp_ajax_nopriv_paystack_payment_charge', 'goodlayers_paystack_payment_charge');
 	}
+
+										
 	if( !function_exists('goodlayers_paystack_payment_page_init') ){
 		function goodlayers_paystack_payment_page_init( $options ){
 			add_action('wp_head', 'goodlayers_paystack_payment_script_include');
@@ -80,9 +83,11 @@ if( $current_payment_gateway == 'paystack' ){
 	}
 if( !function_exists('goodlayers_paystack_payment_script_include') ){
 		function goodlayers_paystack_payment_script_include( $options ){
-			echo '<script src="https://js.paystack.co/v1/inline.js"></script>';
+			echo '<script type="text/javascript" src="https://js.paystack.co/v1/inline.js"></script>';
 		}
 	}
+
+									
 			if( !function_exists('goodlayers_paystack_payment_attribute') ){
 		function goodlayers_paystack_payment_attribute( $attributes ){
 			return array('method' => 'ajax', 'type' => 'paystack');
@@ -93,14 +98,41 @@ if( !function_exists('goodlayers_paystack_payment_script_include') ){
  
 		if( !function_exists('goodlayers_paystack_payment_form') ){
 		function goodlayers_paystack_payment_form( $ret = '', $tid = '' ){
-			//$publishable_key = apply_filters('goodlayers_payment_get_option', '', 'paystack_lsk');
-				ob_start();?>
+			$publishable_key = apply_filters('goodlayers_payment_get_option', '', 'paystack_lsk');
+
+				ob_start();
+			?>
 				<div class="goodlayers-payment-form goodlayers-with-border" >
-	<form action="" method="POST" id="goodlayers-paystack-payment-form"  >
+	<form action="" method="POST" id="goodlayers-paystack-payment-form" data-ajax-url="<?php echo esc_url(admin_url('admin-ajax.php')); ?>" >
 		
 		
   <button class="goodlayers-payment-button submit" type="button" name="pay_now" id="pay-now" title="Pay now"  onclick="saveOrderThenPayWithPaystack()">Pay now</button>
 		
+		   
+		
+											 
+		  
+																										 
+											
+		   
+		
+											 
+		  
+																												
+																						
+		   
+											   
+																					  
+		
+											 
+		  
+																								 
+																				  
+		   
+		
+								 
+									
+																														
 		<input type="hidden" name="tid" value="<?php echo esc_attr($tid) ?>" />
 		
 		
@@ -110,7 +142,6 @@ if( !function_exists('goodlayers_paystack_payment_script_include') ){
 </div>
 <script type="text/javascript">
 	var PAYSTACK_PUBLIC_KEY = '<?php echo esc_js(trim($public_key)); ?>';
-
 	
   var orderObj = {
     email_prepared_for_paystack: '<?php echo $tourmaster_data['email']; ?>',
@@ -118,18 +149,15 @@ if( !function_exists('goodlayers_paystack_payment_script_include') ){
     cartid: <?php echo $tourmaster_data['tour_id']; ?>
     // other params you want to save
   };
-
   function saveOrderThenPayWithPaystack(){
     // Send the data to save using post
     var posting = $.post( '/save-order', orderObj );
-
     posting.done(function( data ) {
       /* check result from the attempt */
       payWithPaystack(data);
     });
     posting.fail(function( data ) { /* and if it failed... */ });
   }
-
   function payWithPaystack(data){
     var handler = PaystackPop.setup({
       // This assumes you already created a constant named
@@ -168,14 +196,51 @@ if( !function_exists('goodlayers_paystack_payment_script_include') ){
   }
 </script>
 
+							   
+																																							
+																			   
+	   
+							 
+									 
+																		 
+													  
+																	  
+	   
 
+																			   
+	  
+		
+	
+	
+  
+							  
+				   
+									  
+						 
+				
+	 
+	  
+
+			 
+															 
+		 
+																		
+																			 
+														 
+	
+
+				
+	 
+			
+		 
 <?php
-
 			$ret = ob_get_contents();
 			ob_end_clean();
 			return $ret;
 		}
 	}
+
+							   
 if( !function_exists('goodlayers_paystack_payment_charge') ){
 		function goodlayers_paystack_payment_charge(){
 
@@ -185,7 +250,6 @@ if( !function_exists('goodlayers_paystack_payment_charge') ){
 			
 				// prepare data
 				$form = stripslashes_deep($_POST['form']);
-
               
 			 // $live_mode = tourmaster_get_option('payment', 'paystack-live-mode', 'disable');
 			$api_id = apply_filters('goodlayers_payment_get_option', '', 'paystack_lpk');
@@ -198,15 +262,14 @@ if( !function_exists('goodlayers_paystack_payment_charge') ){
             $paystack_payment_url = 'https://paystack.url';
             $secretkey = get_option('paystack_lsk');
             $publickey = get_option('paystack_lpk');
-
         } else {
             $paystack_payment_url = 'https://test.paystack.url';
             $secretkey = get_option('paystack_tsk');
             $publickey = get_option('paystack_tpk');
-
         }
 		
 		$t_data = apply_filters('goodlayers_payment_get_transaction_data', array(), $_POST['tid'], array('price', 'email'));
+	
 			$price = ''; $tid =$_POST['tid'];
 				if( $t_data['price']['deposit-price'] ){
 					$price = $t_data['price']['deposit-price'];
@@ -230,6 +293,20 @@ if( !function_exists('goodlayers_paystack_payment_charge') ){
 					}
 
 					try{
+										  
+
+						   
+												 
+																
+								   
+		 
+	  
+												 
+											 
+						  
+							   
+								  
+		 
 
 						$payment_info = array(
 							'payment_method' => 'paystack',
