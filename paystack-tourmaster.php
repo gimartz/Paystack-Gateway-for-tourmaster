@@ -107,33 +107,7 @@ if( !function_exists('goodlayers_paystack_payment_script_include') ){
 		
 		
   <button class="goodlayers-payment-button submit" type="button" name="pay_now" id="pay-now" title="Pay now"  onclick="saveOrderThenPayWithPaystack()">Pay now</button>
-		
-		   
-		
-											 
-		  
-																										 
-											
-		   
-		
-											 
-		  
-																												
-																						
-		   
-											   
-																					  
-		
-											 
-		  
-																								 
-																				  
-		   
-		
-								 
-									
-																														
-		<input type="hidden" name="tid" value="<?php echo esc_attr($tid) ?>" />
+<input type="hidden" name="tid" value="<?php echo esc_attr($tid) ?>" />
 		
 		
 		<!-- for proceeding to last step -->
@@ -194,45 +168,8 @@ if( !function_exists('goodlayers_paystack_payment_script_include') ){
     });
     handler.openIframe();
   }
-</script>
-
-							   
-																																							
-																			   
-	   
-							 
-									 
-																		 
-													  
-																	  
-	   
-
-																			   
-	  
-		
-	
-	
-  
-							  
-				   
-									  
-						 
-				
-	 
-	  
-
-			 
-															 
-		 
-																		
-																			 
-														 
-	
-
-				
-	 
-			
-		 
+</script>							   
+																																						 
 <?php
 			$ret = ob_get_contents();
 			ob_end_clean();
@@ -292,20 +229,7 @@ if( !function_exists('goodlayers_paystack_payment_charge') ){
 						$charge_amount = $price / 100;
 					}
 
-					try{
-										  
-
-						   
-												 
-																
-								   
-		 
-	  
-												 
-											 
-						  
-							   
-								  
+					try{							  
 		 
 
 						$payment_info = array(
