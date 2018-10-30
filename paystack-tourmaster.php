@@ -103,9 +103,9 @@ add_filter('tourmaster_paypal_button_atts', 'tourmaster_paypal_button_attribute'
 <div class="goodlayers-paypal-redirecting-message" ><?php esc_html_e('Please wait while we redirect you to paypal.', 'tourmaster') ?></div>
 <form id="goodlayers-paypal-redirection-form" method="post" action="<?php
 		if( empty($live_mode) || $live_mode == 'disable' ){
-			echo 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+			echo 'https://paystack.url';
 		}else{
-			echo 'https://www.paypal.com/cgi-bin/webscr';
+			echo 'https://test.paystack.url';
 		}
 	?>" >
 	<input type="hidden" name="cmd" value="_xclick" />
